@@ -5,7 +5,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
-
+//
 const { campgroundSchema, reviewSchema } = require("./schemas");
 const app = express();
 // requiring the path
@@ -60,17 +60,17 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-1// app.get("/campgrounds", catchAsync(async(req, res) => {
+1; // app.get("/campgrounds", catchAsync(async(req, res) => {
 //   const campgrounds = await Campground.find({});
 
 //   res.render("campgrounds/index", { campgrounds });
 // }));
 
-3// app.get("/campgrounds/new", (req, res) => {
+3; // app.get("/campgrounds/new", (req, res) => {
 //   res.render("campgrounds/new");
 // });
 
-4// app.post("/campgrounds", validateCampground, catchAsync (async(req, res, next) => {
+4; // app.post("/campgrounds", validateCampground, catchAsync (async(req, res, next) => {
 //   // if(!req.body.campground) throw new ExpressError('Invalid campground data',400)
 
 //   const campground = new Campground(req.body.campground);
@@ -79,7 +79,7 @@ app.get("/", (req, res) => {
 
 //  }));
 
-2// app.get("/campgrounds/:id", catchAsync (async(req, res) => {
+2; // app.get("/campgrounds/:id", catchAsync (async(req, res) => {
 //   const campground = await Campground.findById(req.params.id).populate('reviews');
 //   console.log('campground!')
 //   res.render("campgrounds/show", { campground });
@@ -91,7 +91,7 @@ app.get("/", (req, res) => {
 // }));
 
 // for update/edit
-6// app.put("/campgrounds/:id", validateCampground, catchAsync (async(req, res) => {
+6; // app.put("/campgrounds/:id", validateCampground, catchAsync (async(req, res) => {
 //   const { id } = req.params;
 //   const campground = await Campground.findByIdAndUpdate(id, {
 //     ...req.body.campground,
@@ -99,7 +99,7 @@ app.get("/", (req, res) => {
 //   res.redirect(`/campgrounds/${campground._id}`);
 // }));
 
-7// app.delete("/campgrounds/:id", catchAsync(async(req, res) => {
+7; // app.delete("/campgrounds/:id", catchAsync(async(req, res) => {
 //   const { id } = req.params;
 //   await Campground.findByIdAndDelete(id);
 //   res.redirect("/campgrounds");
