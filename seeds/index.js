@@ -1,34 +1,58 @@
-const cities = require("./cities");
-const mongoose = require("mongoose");
-const { places, descriptors } = require("./seedHelpers");
+const mongoose = require('mongoose');
+const cities = require('./cities');
+const { places, descriptors } = require('./seedHelpers');
+const Campground = require('../models/campground');
 
-const Campground = require("../models/campground");
+mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+});
 
-// mongoose.connect('mongodb+srv://dhilruba:Hamdan%4095@cluster0.y75se.mongodb.net/test');
-main().catch((err) => console.log(err));
+const db = mongoose.connection;
 
-async function main() {
-  await mongoose.connect("mongodb://localhost:27017/yelp-camp");
-  console.log("connected");
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+    console.log("Database connected");
+});
+
+const sample = array => array[Math.floor(Math.random() * array.length)];
+
+
+const seedDB = async () => {
+    await Campground.deleteMany({});
+    for (let i = 0; i < 300; i++) {
+        const random1000 = Math.floor(Math.random() * 1000);
+        const price = Math.floor(Math.random() * 20) + 10;
+        const camp = new Campground({
+            //YOUR USER ID
+            author: '629ef5c7cc08563274179086',
+            location: `${cities[random1000].city}, ${cities[random1000].state}`,
+            title: `${sample(descriptors)} ${sample(places)}`,
+            description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolores vero perferendis laudantium, consequuntur voluptatibus nulla architecto, sit soluta esse iure sed labore ipsam a cum nihil atque molestiae deserunt!',
+            price,
+            geometry: {
+                type: "Point",
+                coordinates: [
+                    cities[random1000].longitude,
+                    cities[random1000].latitude,
+                ]
+            },
+            images: [
+                {
+                    url: 'https://res.cloudinary.com/douqbebwk/image/upload/v1600060601/YelpCamp/ahfnenvca4tha00h2ubt.png',
+                    filename: 'YelpCamp/ahfnenvca4tha00h2ubt'
+                },
+                {
+                    url: 'https://res.cloudinary.com/douqbebwk/image/upload/v1600060601/YelpCamp/ruyoaxgf72nzpi4y6cdi.png',
+                    filename: 'YelpCamp/ruyoaxgf72nzpi4y6cdi'
+                }
+            ]
+        })
+        await camp.save();
+    }
 }
 
-const sample = (array) => array[Math.floor(Math.random() * array.length)];
-const seedDB = async () => {
-  await Campground.deleteMany({});
-  for (let i = 0; i < 50; i++) {
-    const random1000 = Math.floor(Math.random() * 1000);
-    const price = Math.floor(Math.random() * 20) + 10;
-    const camp = new Campground({
-      location: `${cities[random1000].city}, ${cities[random1000].state}`,
-      title: `${sample(descriptors)} ${sample(places)}`,
-      image: "https://source.unsplash.com/collection/483251",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cum repudiandae eligendi esse eos expedita velit quae quasi rem sint culpa.Ratione, tempora maiores doloremque voluptatem porro perspiciatis aspernatur ipsum soluta?",
-      price,
-    });
-    await camp.save();
-  }
-};
-
-// to close database collection
-seedDB();
+seedDB().then(() => {
+    mongoose.connection.close();
+})
